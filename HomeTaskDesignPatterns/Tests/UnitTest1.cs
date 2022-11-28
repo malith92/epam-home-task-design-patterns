@@ -26,7 +26,7 @@ namespace HomeTaskDesignPatterns.Tests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            _driver = BrowserFactory.GetInstance().CreateBrowser("CHROME");
+            _driver = WebDriverFactory.CreateWebDriver("CHROME");
 
             _driver.Manage().Window.Maximize();
 
