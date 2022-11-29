@@ -6,7 +6,7 @@ namespace HomeTaskDesignPatterns.PageObjects
     {
         public BasePage(IWebDriver driver) : base(driver) 
         {
-            WaitUntilPageLoads();
+            //WaitUntilPageLoads();
         }
 
         public void WaitUntilPageLoads()

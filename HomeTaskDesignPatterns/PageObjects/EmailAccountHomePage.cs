@@ -9,7 +9,7 @@ using HomeTaskDesignPatterns.PageObjects.EmailAccountPageSections;
 
 namespace HomeTaskDesignPatterns.PageObjects
 {
-    public class EmailAccountPage : BasePage
+    public class EmailAccountHomePage : BasePage
     {
         private readonly By _gmailImageLocator = By.XPath("//a[@title='Gmail']/img");
         private readonly By _composeButtonLocator = By.XPath("//div[text()='Compose']");
@@ -17,7 +17,7 @@ namespace HomeTaskDesignPatterns.PageObjects
         private readonly By _sentLinkLocator = By.LinkText("Sent");
         private readonly By _accountAvatarLinkLocator = By.XPath("//a[contains(@aria-label,'Google Account: Test Account')]");
 
-        public EmailAccountPage(IWebDriver driver) : base(driver) { }
+        public EmailAccountHomePage(IWebDriver driver) : base(driver) { }
 
         public bool GMailImageIsDisplayed()
         {

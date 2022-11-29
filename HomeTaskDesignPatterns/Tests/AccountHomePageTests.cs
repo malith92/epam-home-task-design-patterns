@@ -4,16 +4,17 @@ using OpenQA.Selenium;
 using HomeTaskDesignPatterns.PageObjects;
 using HomeTaskDesignPatterns.PageObjects.EmailAccountPageSections;
 using HomeTaskDesignPatterns.Utilities;
+using HomeTaskDesignPatterns.WebDriver;
 
 namespace HomeTaskDesignPatterns.Tests
 {
     [TestFixture]
-    public class Tests
+    public class AccountHomePageTests
     {
         private IWebDriver _driver;
 
         private LoginPage? _loginPage;
-        private EmailAccountPage? _emailAccountPage;
+        private EmailAccountHomePage? _emailAccountPage;
         private EmailComposeSection? _composeSection;
         private DraftsSection? _draftsSection;
         private SentSection? _sentSection;
@@ -28,7 +29,8 @@ namespace HomeTaskDesignPatterns.Tests
         {
             _driver = WebDriverFactory.CreateWebDriver("CHROME");
 
-            _driver.Manage().Window.Maximize();
+            _driver = new PageLoadWaitEnabledWebDriver(_driver);
+            _driver = new PageMaximizationEnabledWebDriver(_driver);
 
             _driver.Navigate().GoToUrl("https://accounts.google.com/ServiceLogin/signinchooser?service=mail");
         }
@@ -39,22 +41,13 @@ namespace HomeTaskDesignPatterns.Tests
             //_driver.Quit();
         }
 
-        [Test, Order(1)]
-        [TestCase("ta3862989@gmail.com", "!QAZ2wsx!@")]
-        public void LoginTest(string userName, string password)
-        {
-            _loginPage = new LoginPage(_driver);
-
-            _emailAccountPage = _loginPage.Login(userName, password);
-            bool loginSuccessful = _emailAccountPage.GMailImageIsDisplayed();
-
-            Assert.IsTrue(loginSuccessful);
-        }
-
         [Test, Order(2)]
         [TestCase("malithwanniarachchi@gmail.com", "Test Email | ", "Test Email Content")]
         public void VerifyDraftedEmailPresentInDrafts(string recipientEmail, string subject, string content)
         {
+            _loginPage = new LoginPage(_driver);
+            _emailAccountPage = _loginPage.Login("ta3862989@gmail.com", "!QAZ2wsx!@");
+
             _composeSection = _emailAccountPage.ClickComposeButton();
             _subject = subject + DateTime.Now.ToString("F");
             _composeSection.CreateDraftEmail(recipientEmail, _subject, content);

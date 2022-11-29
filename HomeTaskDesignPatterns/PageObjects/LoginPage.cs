@@ -31,14 +31,14 @@ namespace HomeTaskDesignPatterns.PageObjects
             base.Driver.FindElement(_passwordNextButtonLocator).Click();
         }
 
-        public EmailAccountPage Login(string userName, string password)
+        public EmailAccountHomePage Login(string userName, string password)
         {
             this.EnterUserName(userName);
             this.ClickNextAfterEnteringUserName();
             this.EnterPassword(password);
             this.ClickNextAfterEnteringPassword();
 
-            return new EmailAccountPage(base.Driver);
+            return new EmailAccountHomePage(base.Driver);
         }
     }
 }
