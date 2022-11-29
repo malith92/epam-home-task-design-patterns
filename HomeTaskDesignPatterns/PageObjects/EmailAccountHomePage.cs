@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenQA.Selenium.Support.UI;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using HomeTaskDesignPatterns.PageObjects.EmailAccountPageSections;
 
 namespace HomeTaskDesignPatterns.PageObjects
@@ -28,8 +22,7 @@ namespace HomeTaskDesignPatterns.PageObjects
 
         public EmailComposeSection ClickComposeButton()
         {
-            base.Driver.FindElement(_composeButtonLocator).Click();
-
+            base.DefaultWait.Until(_driver => _driver.FindElement(_composeButtonLocator)).Click();
             return new EmailComposeSection(base.Driver);
         }
 

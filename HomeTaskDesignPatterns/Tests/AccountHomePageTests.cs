@@ -1,18 +1,12 @@
 using NUnit.Framework;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium;
 using HomeTaskDesignPatterns.PageObjects;
 using HomeTaskDesignPatterns.PageObjects.EmailAccountPageSections;
-using HomeTaskDesignPatterns.Utilities;
-using HomeTaskDesignPatterns.WebDriver;
 
 namespace HomeTaskDesignPatterns.Tests
 {
     [TestFixture]
-    public class AccountHomePageTests
+    public class AccountHomePageTests : BaseTestObject
     {
-        private IWebDriver _driver;
-
         private LoginPage? _loginPage;
         private EmailAccountHomePage? _emailAccountPage;
         private EmailComposeSection? _composeSection;
@@ -23,30 +17,12 @@ namespace HomeTaskDesignPatterns.Tests
 
         private string? _subject;
 
-
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            _driver = WebDriverFactory.CreateWebDriver("CHROME");
-
-            _driver = new PageLoadWaitEnabledWebDriver(_driver);
-            _driver = new PageMaximizationEnabledWebDriver(_driver);
-
-            _driver.Navigate().GoToUrl("https://accounts.google.com/ServiceLogin/signinchooser?service=mail");
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            //_driver.Quit();
-        }
-
-        [Test, Order(2)]
+        [Test, Order(1)]
         [TestCase("malithwanniarachchi@gmail.com", "Test Email | ", "Test Email Content")]
         public void VerifyDraftedEmailPresentInDrafts(string recipientEmail, string subject, string content)
         {
             _loginPage = new LoginPage(_driver);
-            _emailAccountPage = _loginPage.Login("ta3862989@gmail.com", "!QAZ2wsx!@");
+            _emailAccountPage = _loginPage.Login(configurationFileReader.TestData.EmailCredentials.UserName, configurationFileReader.TestData.EmailCredentials.Password);
 
             _composeSection = _emailAccountPage.ClickComposeButton();
             _subject = subject + DateTime.Now.ToString("F");
@@ -58,7 +34,7 @@ namespace HomeTaskDesignPatterns.Tests
             Assert.IsTrue(draftedEmailIsAvailable);
         }
 
-        [Test, Order(3)]
+        [Test, Order(2)]
         [TestCase("malithwanniarachchi@gmail.com")]
         public void VerifyDraftEmailReceiver(string receiverEmailAddress)
         {
@@ -69,7 +45,7 @@ namespace HomeTaskDesignPatterns.Tests
             Assert.AreEqual(receiverEmailAddress, actualReceiverAddress);
         }
 
-        [Test, Order(4)]
+        [Test, Order(3)]
         public void VerifyDraftEmailSubject()
         {
             string draftedEmailSubject = _composeSection.GetSubjectFromDraftedEmail();
@@ -77,7 +53,7 @@ namespace HomeTaskDesignPatterns.Tests
             Assert.AreEqual(this._subject, draftedEmailSubject);
         }
 
-        [Test, Order(5)]
+        [Test, Order(4)]
         [TestCase("Test Email Content")]
         public void VerifyDraftEmailBody(string expectedContent)
         {
@@ -86,7 +62,7 @@ namespace HomeTaskDesignPatterns.Tests
             Assert.AreEqual(expectedContent, draftedEmailBody);
         }
 
-        [Test, Order(6)]
+        [Test, Order(5)]
         public void VerifyDraftEmailDissapearedFromDrafts()
         {
             _composeSection.ClickSendButton();
@@ -96,7 +72,7 @@ namespace HomeTaskDesignPatterns.Tests
             Assert.IsFalse(draftedEmailIsDisplayed);
         }
 
-        [Test, Order(7)]
+        [Test, Order(6)]
         public void VerifyMailIsinSentFolder()
         {
             _sentSection = _emailAccountPage.ClickSentLink();
@@ -106,7 +82,7 @@ namespace HomeTaskDesignPatterns.Tests
             Assert.IsTrue(sentEmailIsDisplayed);
         }
 
-        [Test, Order(8)]
+        [Test, Order(7)]
         public void LogOffTest()
         {
             _accountSection = _emailAccountPage.ClickAccountLink();
